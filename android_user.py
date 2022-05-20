@@ -63,7 +63,7 @@ while True:
                 for reply in text:
                     cprint(reply,'red')
                     try:
-                        os.system("termux-tts-engines "+ reply)
+                        os.system("termux-tts-speak "+ reply)
                     except:
                         pass
             else:
