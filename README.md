@@ -1,8 +1,5 @@
 # fury-server
 
-
-
-
 #steps:
 git colne https://github.com/NormVg/fury-server
 cd fury-server
