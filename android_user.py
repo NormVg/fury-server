@@ -1,15 +1,19 @@
-import requests
-import os 
 from termcolor import cprint
+import json
+import requests
+import os
+from speak import say
+from web_browse import web_opener
+
 
 try:
     os.system("clear")
-finally:
+except:
     os.system("cls")
+    
+passcode = ["007","e@A$x788z339"]
 
 cprint(    '''
-            
-
                                    @              
                            .     .  @@(.           
                    (@#*. .  ,// #  .@@@%            
@@ -30,59 +34,34 @@ cprint(    '''
                        ...  ...,@@//.  @           
                            ./@(     ,*             
 
-
-
     '''
 ,"green")
-i = input("password --> ")
-if '007' in i:
-
+cprint("<--ENTER-PASSWORD-->","red")
+i = input("$ --> ")
+if i in passcode:
     while True:
         querry = input(">>> ")
         if len(querry) == 0:
             pass
         else:
-            link  = f"http://thefury.pythonanywhere.com/fury?command={querry}"
-            response = requests.get(link)
-            response = response.text
-
-            if "<!doctype html>" in response:
-                re = response.split("<--",maxsplit=1)
-                response = re[0]
-
-
-
-            def web_opener(url):
-                cprint(url,'cyan')
-                try:
-                    os.system("termux-open-url " + url)
-                except:
-                    pass
-
-            def speak(text):
-                if " <> " in text:
-                    text = str(text).split("<>")
-                    for reply in text:
-                        cprint(reply,'red')
-                        try:
-                            os.system("termux-tts-speak "+ reply)
-                        except:
-                            pass
-                else:
-                    cprint(text,'red')
-                    try:
-                            os.system("termux-tts-speak "+ text)
-                    except:
-                            pass
-
-            if " <link> " in response:
-                command = response.split("<link>",maxsplit=1)
-                speak(command[0])
-        #        try:
-                links = command[1].split(",")
-
-                for link in links:
-                    web_opener(link)
-            else:
-
-                speak(response)
+            try:
+                link  = f"https://thefury.pythonanywhere.com/fury?command={querry}"
+                response = requests.get(link)
+                status = response.status_code
+                response = response.text
+                if status == 500:
+                    print("<--SERVER-ERROR-->")
+                elif status == 200:
+                    response = json.loads(response)
+                    response = response["response"]
+                    for every_reply  in response:
+                        reply = every_reply[0]
+                        text = reply[0]["text"]
+                        if "link" in reply[0]:
+                            link = reply[0]["link"]
+                            for every_link in link:
+                                #print(every_link)
+                                web_opener(every_link)
+                        say(text)
+            except:
+                print("<--CAN-NOT-CONNECT-TO-SERVER-->")
