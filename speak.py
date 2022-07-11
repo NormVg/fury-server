@@ -7,5 +7,6 @@ def say(text):
     speak.save("tts.mp3")
     os.system(f"termux-media-player play tts.mp3")
     cprint(text,"cyan")
-    os.remove("tts.mp3")
     time.sleep(.5)
+    os.remove("tts.mp3")
+    
